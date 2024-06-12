@@ -1,0 +1,120 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  /* font-family: "Noto Sans", sans-serif; */
+  /* font-family: "Ubuntu Sans Mono", monospace; */
+  font-weight: normal;
+  font-size: 20px;
+  color: white;
+}
+
+[data-testid="stAppViewContainer"] {
+  background-color: #030637;
+}
+
+section.main.st-emotion-cache-bm2z3a.ea3mdgi8,
+header.st-emotion-cache-h4xjwg.ezrtsby2 {
+  background: #030637;
+}
+header.st-emotion-cache-h4xjwg.ezrtsby2 {
+  height: 3rem;
+}
+div.st-emotion-cache-13ln4jf {
+  padding: 4rem 1rem 10rem;
+}
+
+[data-testid="stHeadingWithActionElements"] h1 {
+  /* font-family: "Noto Sans", sans-serif; */
+  font-family: "Ubuntu Sans Mono", monospace;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 2rem;
+  padding-bottom: 2rem;
+}
+
+div.st-emotion-cache-1v0mbdj.e115fcil1 > img {
+  border-radius: 5px;
+}
+
+[data-testid="stSidebar"] {
+  background-color: #3c0753;
+}
+div.st-emotion-cache-1tpl0xr.e1nzilvr4 > p {
+  font-size: 1.5rem;
+}
+div.st-emotion-cache-1i2wz1k.eczjsme7 {
+  background-color: #030637;
+}
+
+div.st-emotion-cache-1kyxreq.e115fcil2 {
+  justify-content: center;
+  align-items: center;
+  /* border: 2px solid red; */
+}
+
+button.st-emotion-cache-19rxjzo.ef3psqc12:hover {
+  border-color: #ea1179;
+  color: #ea1179;
+}
+button.st-emotion-cache-19rxjzo.ef3psqc12:active {
+  border-color: #ea1179;
+  color: #f5f7f8;
+  background-color: #ea1179;
+}
+button.st-emotion-cache-19rxjzo.ef3psqc12:focus {
+  border-color: #ea1179;
+}
+
+div.st-emotion-cache-ul70r3.e1nzilvr4 {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+div.st-emotion-cache-ul70r3.e1nzilvr4 > p {
+  font-size: 1.7rem;
+}
+
+div.st-emotion-cache-ul70r3.e1nzilvr4 > p.footerText {
+  font-size: 15px;
+}
+
+[data-testid="stMarkdownContainer"] p {
+  font-family: "Ubuntu Sans Mono", monospace;
+  /* font-family: "Noto Sans", sans-serif; */
+}
+
+.out {
+  color: #faef5d;
+}
+
+[data-testid="stNotificationContentWarning"]
+  > div.st-emotion-cache-1qgk3lp.e1eexb540
+  > [data-testid="stMarkdownContainer"]
+  > p {
+  font-size: 16px;
+}
+
+div.st-ay {
+  background-color: #9f0d7f;
+}
+
+[data-testid="stImage"] {
+  /* height: 20rem; */
+}
+
+.st-emotion-cache-p5msec:hover {
+  color: #ea1179;
+}
+
+.footerText {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 999999;
+  font-size: 15px;
+}
