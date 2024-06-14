@@ -6,8 +6,6 @@
   box-sizing: border-box;
 }
 body {
-  /* font-family: "Noto Sans", sans-serif; */
-  /* font-family: "Ubuntu Sans Mono", monospace; */
   font-weight: normal;
   font-size: 20px;
   color: white;
@@ -54,7 +52,6 @@ div.st-emotion-cache-1i2wz1k.eczjsme7 {
 div.st-emotion-cache-1kyxreq.e115fcil2 {
   justify-content: center;
   align-items: center;
-  /* border: 2px solid red; */
 }
 
 button.st-emotion-cache-19rxjzo.ef3psqc12:hover {
@@ -101,10 +98,6 @@ div.st-emotion-cache-ul70r3.e1nzilvr4 > p.footerText {
 
 div.st-ay {
   background-color: #9f0d7f;
-}
-
-[data-testid="stImage"] {
-  /* height: 20rem; */
 }
 
 .st-emotion-cache-p5msec:hover {

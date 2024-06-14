@@ -1,16 +1,14 @@
-import numpy as np
 import cv2
-import mediapipe as mp
-from tensorflow.keras.models import load_model
-import streamlit as st
-import time
-import os
 import datetime
-
 from gtts import gTTS
+import mediapipe as mp
+import numpy as np
+import os
 from playsound import playsound
-
-# import pyttsx3
+import streamlit as st
+from tensorflow.keras.models import load_model
+import time
+import uuid
 
 
 def text_detection_model_load():
@@ -162,7 +160,6 @@ def detection(model, reverse_label_map):
                                 pass
                         else:
                             text_to_speech_gtts(words)
-                        # text_to_speech_pyttsx(words)
                         word_list = []
                     except Exception as e:
                         print(f"Error: {e}")
@@ -194,20 +191,13 @@ def clear_txt():
     word_placeholder.markdown("<p></p>", unsafe_allow_html=True)
 
 
-# def text_to_speech_pyttsx(txt):
-#     engine = pyttsx3.init()
-#     engine.setProperty("rate", 140)
-#     engine.say(txt)
-#     engine.runAndWait()
-#     engine.stop()
-
-
 def text_to_speech_gtts(txt):
-    lang = "en-uk"
+    unique_file = f"assets/voice_{uuid.uuid4()}.mp3"
+    lang = "en"
     obj = gTTS(text=txt, lang=lang, slow=False)
-    obj.save("assets/voice.mp3")
-    playsound("assets/voice.mp3")
-    os.remove("assets/voice.mp3")
+    obj.save(unique_file)
+    playsound(unique_file)
+    os.remove(unique_file)
 
 
 if __name__ == "__main__":
