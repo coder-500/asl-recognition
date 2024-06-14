@@ -10,7 +10,7 @@ from tensorflow.keras.models import load_model
 import threading
 
 
-@st.cache_data
+@st.cache_resource
 def text_detection_model_load():
     # Load the model and label map
     # model = load_model("models/model_9.h5")
@@ -23,7 +23,7 @@ def text_detection_model_load():
     return model, reverse_label_map
 
 
-@st.cache_data
+@st.cache_resource
 def num_detection_model_load():
     # Load the model and label map
     model = load_model("models/asl_number_model.h5")
