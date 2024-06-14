@@ -182,7 +182,11 @@ if __name__ == "__main__":
 
     clear_button = st.button("Clear Output", on_click=clear_txt)
 
-    ctx = webrtc_streamer(key="test", video_frame_callback=video_frame_callback)
+    ctx = webrtc_streamer(
+        key="test",
+        video_frame_callback=video_frame_callback,
+        rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+    )
 
     # Empty placeholders
     with st.container(border=True):
