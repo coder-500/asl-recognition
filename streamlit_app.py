@@ -10,7 +10,7 @@ from tensorflow.keras.models import load_model
 import threading
 
 
-@st.cache_resource(max_entries=500, show_spinner=False)
+@st.cache_resource(max_entries=1000, show_spinner=False)
 def text_detection_model_load():
     # Load the model and label map
     # model = load_model("models/model_9.h5")
@@ -23,7 +23,7 @@ def text_detection_model_load():
     return model, reverse_label_map
 
 
-@st.cache_resource(max_entries=500, show_spinner=False)
+@st.cache_resource(max_entries=1000, show_spinner=False)
 def num_detection_model_load():
     # Load the model and label map
     model = load_model("models/asl_number_model.h5")
@@ -95,11 +95,11 @@ def detection():
                         data_aux.append(y - min(y_))
                         data_aux.append(z - min(z_))
 
-                x1 = int(min(x_) * w) - 20
-                y1 = int(min(y_) * h) - 20
+                x1 = int(min(x_) * w) - 25
+                y1 = int(min(y_) * h) - 25
 
-                x2 = int(max(x_) * w) + 20
-                y2 = int(max(y_) * h) + 20
+                x2 = int(max(x_) * w) + 25
+                y2 = int(max(y_) * h) + 25
 
                 prev_pred = predicted_class
 
