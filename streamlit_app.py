@@ -61,7 +61,7 @@ def video_frame_callback(frame):
     with lock:
         frame_container["frame"] = img
 
-    del frame  # 061524
+    # del frame  # 061524
     return av.VideoFrame.from_ndarray(img, format="bgr24")
 
 
