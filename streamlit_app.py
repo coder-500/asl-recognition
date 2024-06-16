@@ -6,33 +6,52 @@ import numpy as np
 import streamlit as st
 from streamlit_webrtc import webrtc_streamer
 import time
+import tensorflow as tf
 from tensorflow.keras.models import load_model
 import threading
 
 
+# @st.cache_resource(max_entries=1000, show_spinner=False)
+# def text_detection_model_load():
+#     # Load the model and label map
+#     model = load_model("models/asl_alphabet_model.h5")
+#     label_map = np.load("label_map/alphabet_label_map.npy", allow_pickle=True).item()
+
+#     # Reverse label map for prediction
+#     reverse_label_map = {v: k for k, v in label_map.items()}
+
+#     return model, reverse_label_map
+
+
+# @st.cache_resource(max_entries=1000, show_spinner=False)
+# def num_detection_model_load():
+#     # Load the model and label map
+#     model = load_model("models/asl_number_model.h5")
+#     label_map = np.load("label_map/num_label_map.npy", allow_pickle=True).item()
+
+#     # Reverse label map for prediction
+#     reverse_label_map = {v: k for k, v in label_map.items()}
+
+#     return model, reverse_label_map
+
+
+# 061624
 @st.cache_resource(max_entries=1000, show_spinner=False)
 def text_detection_model_load():
-    # Load the model and label map
-    # model = load_model("models/model_9.h5")
-    model = load_model("models/asl_alphabet_model.h5")
+    interpreter = tf.lite.Interpreter(model_path="models/asl_alphabet_model.tflite")
+    interpreter.allocate_tensors()
     label_map = np.load("label_map/alphabet_label_map.npy", allow_pickle=True).item()
-
-    # Reverse label map for prediction
     reverse_label_map = {v: k for k, v in label_map.items()}
-
-    return model, reverse_label_map
+    return interpreter, reverse_label_map
 
 
 @st.cache_resource(max_entries=1000, show_spinner=False)
 def num_detection_model_load():
-    # Load the model and label map
-    model = load_model("models/asl_number_model.h5")
+    interpreter = tf.lite.Interpreter(model_path="models/asl_number_model.tflite")
+    interpreter.allocate_tensors()
     label_map = np.load("label_map/num_label_map.npy", allow_pickle=True).item()
-
-    # Reverse label map for prediction
     reverse_label_map = {v: k for k, v in label_map.items()}
-
-    return model, reverse_label_map
+    return interpreter, reverse_label_map
 
 
 def video_frame_callback(frame):
@@ -41,7 +60,22 @@ def video_frame_callback(frame):
         cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
     with lock:
         frame_container["frame"] = img
+
+    del frame  # 061524
     return av.VideoFrame.from_ndarray(img, format="bgr24")
+
+
+def detect_with_tflite(interpreter, input_data):
+    input_details = interpreter.get_input_details()
+    output_details = interpreter.get_output_details()
+
+    input_data = input_data.astype(np.float32)  # 061724
+
+    interpreter.set_tensor(input_details[0]["index"], input_data)
+    interpreter.invoke()
+    output_data = interpreter.get_tensor(output_details[0]["index"])
+
+    return output_data
 
 
 def detection():
@@ -104,7 +138,8 @@ def detection():
                 prev_pred = predicted_class
 
                 data_aux = np.array(data_aux).reshape(1, 21, 3, 1)
-                prediction = model.predict(data_aux)
+                # prediction = model.predict(data_aux)
+                prediction = detect_with_tflite(model, data_aux)  # 061624
                 predicted_class = reverse_label_map[np.argmax(prediction)]
 
                 if prev_pred == predicted_class:
@@ -112,7 +147,8 @@ def detection():
                 else:
                     count_same_frame = 0
 
-                if count_same_frame > 7:
+                # if count_same_frame > 7:
+                if count_same_frame > 10:  # 061724
                     word += predicted_class
                     word_placeholder.markdown(
                         f"<p>Output: <span class='out'>{word}</span></p>",
@@ -140,6 +176,7 @@ def detection():
                     unsafe_allow_html=True,
                 )
 
+            # del frame, frame_rgb, results, data_aux, x_, y_, z_  # 061524
         except Exception as e:
             print(f"An Error occurred: {e}")
     else:
