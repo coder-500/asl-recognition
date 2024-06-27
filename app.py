@@ -13,7 +13,6 @@ import uuid
 
 def text_detection_model_load():
     # Load the model and label map
-    # model = load_model("models/model_9.h5")
     model = load_model("models/asl_alphabet_model.h5")
     label_map = np.load("label_map/alphabet_label_map.npy", allow_pickle=True).item()
 
