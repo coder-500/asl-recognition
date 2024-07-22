@@ -85,6 +85,9 @@ div.st-emotion-cache-ul70r3.e1nzilvr4 > p.footerText {
   /* font-family: "Noto Sans", sans-serif; */
 }
 
+.prediction_out {
+  font-size: 1.5rem;
+}
 .out {
   color: #faef5d;
 }

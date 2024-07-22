@@ -5,6 +5,10 @@ footer.py
 
 Data/Alphabet_Data
 Data/Numeric_Data
+Data/Fine_Tuning
+Data/1
+
+models/fine_tuned
 
 assets/voice*
 

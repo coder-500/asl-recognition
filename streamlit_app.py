@@ -221,6 +221,7 @@ if __name__ == "__main__":
 
     clear_button = st.button("Clear Output", on_click=clear_txt)
 
+    # TODO Try different stun servers from the following url: https://gist.github.com/mondain/b0ec1cf5f60ae726202e
     ctx = webrtc_streamer(
         key="test",
         video_frame_callback=video_frame_callback,

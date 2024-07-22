@@ -13,8 +13,10 @@ import uuid
 
 def text_detection_model_load():
     # Load the model and label map
-    # model = load_model("models/model_9.h5")
-    model = load_model("models/asl_alphabet_model.h5")
+
+    # model = load_model("models/asl_alphabet_model.h5")
+    model = load_model("models/fine_tuned_alpha.h5")
+
     label_map = np.load("label_map/alphabet_label_map.npy", allow_pickle=True).item()
 
     # Reverse label map for prediction
@@ -25,7 +27,10 @@ def text_detection_model_load():
 
 def num_detection_model_load():
     # Load the model and label map
+
     model = load_model("models/asl_number_model.h5")
+    # model = load_model("models/fine_tuned_num.h5")
+
     label_map = np.load("label_map/num_label_map.npy", allow_pickle=True).item()
 
     # Reverse label map for prediction
@@ -74,8 +79,8 @@ def detection(model, reverse_label_map):
                             frame,
                             lm,
                             mp_hands.HAND_CONNECTIONS,
-                            mp.solutions.drawing_styles.get_default_hand_landmarks_style(),
-                            mp.solutions.drawing_styles.get_default_hand_connections_style(),
+                            custom_landmark_style,
+                            custom_connection_style,
                         )
 
                     for hand_landmarks in results.multi_hand_landmarks:
@@ -97,11 +102,13 @@ def detection(model, reverse_label_map):
                             data_aux.append(y - min(y_))
                             data_aux.append(z - min(z_))
 
-                    x1 = int(min(x_) * w) - 20
-                    y1 = int(min(y_) * h) - 20
+                    x1 = int(min(x_) * w) - 30
+                    y1 = int(min(y_) * h) - 30
 
-                    x2 = int(max(x_) * w) + 20
-                    y2 = int(max(y_) * h) + 20
+                    x2 = int(max(x_) * w) + 30
+                    y2 = int(max(y_) * h) + 30
+
+                    cv2.rectangle(frame, (x1, y1), (x2, y2), (252, 167, 81), 3)
 
                     prev_pred = predicted_class
 
@@ -118,21 +125,20 @@ def detection(model, reverse_label_map):
                         word += predicted_class
                         word_list.append(predicted_class)
                         word_placeholder.markdown(
-                            f"<p>Output: <span class='out'>{word}</span></p>",
+                            f"<p class='prediction_out'>Output: <span class='out'>{word}</span></p>",
                             unsafe_allow_html=True,
                         )
                         count_same_frame = 0
 
-                    cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 5)
                     placeholder.markdown(
-                        f"<p>Prediction: <span class='out'>{predicted_class}</span></p>",
+                        f"<p class='prediction_out'>Prediction: <span class='out'>{predicted_class}</span></p>",
                         unsafe_allow_html=True,
                     )
                     start = time.time()
                 else:
                     end = time.time() - start
                     placeholder.markdown(
-                        f"<p>Prediction: </p>",
+                        f"<p class='prediction_out'>Prediction: </p>",
                         unsafe_allow_html=True,
                     )
                     word += " "
@@ -140,7 +146,7 @@ def detection(model, reverse_label_map):
                         word = " "
                         sentence = ""
                     word_placeholder.markdown(
-                        f"<p>Output: <span class='out'>{word}</span></p>",
+                        f"<p class='prediction_out'>Output: <span class='out'>{word}</span></p>",
                         unsafe_allow_html=True,
                     )
 
@@ -174,11 +180,11 @@ def detection(model, reverse_label_map):
         # Placeholder image when webcam is off
         st_frame.image(np.ones((480, 640, 3)), channels="BGR", caption="Enable Camera")
         placeholder.markdown(
-            f"<p>Prediction: </p>",
+            f"<p class='prediction_out'>Prediction: </p>",
             unsafe_allow_html=True,
         )
         word_placeholder.markdown(
-            f"<p>Output: </p>",
+            f"<p class='prediction_out'>Output: </p>",
             unsafe_allow_html=True,
         )
 
@@ -213,6 +219,13 @@ if __name__ == "__main__":
         min_detection_confidence=0.7,
         min_tracking_confidence=0.7,
     )
+
+    # Drawing utilities.
+    mp_drawing = mp.solutions.drawing_utils
+
+    # Custom styles for landmarks and connections.
+    custom_landmark_style = mp_drawing.DrawingSpec(color=(244, 250, 197), thickness=4)
+    custom_connection_style = mp_drawing.DrawingSpec(color=(250, 207, 97), thickness=2)
 
     st.title("ASL Recognition System ...")
 
@@ -256,10 +269,10 @@ if __name__ == "__main__":
 
     detection(model, reverse_label_map)
 
-    with st.expander("How to use"):
-        st.write(
-            """
-            Direction of use...
-        """
-        )
-        st.image("https://static.streamlit.io/examples/dice.jpg")
+    # with st.expander("How to use"):
+    #     st.write(
+    #         """
+    #         Direction of use...
+    #     """
+    #     )
+    #     st.image("https://static.streamlit.io/examples/dice.jpg")
