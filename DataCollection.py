@@ -19,6 +19,10 @@ current_dir = os.path.dirname(__file__)
 time.sleep(2)
 dir_name = input("Enter Directory Name: ")  # eg., A,B,C,0,1 etc.
 
+parent = "Data/Sample"  # Change the folder as per your choice
+
+if not os.path.exists(parent):
+    os.mkdir(parent)
 folder = os.path.join(current_dir, f"Data/Sample/{dir_name}")
 
 
