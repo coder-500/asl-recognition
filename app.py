@@ -28,8 +28,8 @@ def text_detection_model_load():
 def num_detection_model_load():
     # Load the model and label map
 
-    model = load_model("models/asl_number_model.h5")
-    # model = load_model("models/fine_tuned_num.h5")
+    # model = load_model("models/asl_number_model.h5")
+    model = load_model("models/asl_number_model_2.h5")
 
     label_map = np.load("label_map/num_label_map.npy", allow_pickle=True).item()
 

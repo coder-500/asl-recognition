@@ -2,11 +2,12 @@ import numpy as np
 import cv2
 import mediapipe as mp
 from tensorflow.keras.models import load_model
+import time
 
 
 def text_detection_model_load():
     # Load the model and label map
-    model = load_model("models/asl_alphabet_model.h5")
+    model = load_model("models/fine_tuned_alpha.h5")
     label_map = np.load("label_map/alphabet_label_map.npy", allow_pickle=True).item()
 
     # Reverse label map for prediction
@@ -17,7 +18,7 @@ def text_detection_model_load():
 
 def num_detection_model_load():
     # Load the model and label map
-    model = load_model("models/asl_number_model.h5")
+    model = load_model("models/asl_number_model_2.h5")
     label_map = np.load("label_map/num_label_map.npy", allow_pickle=True).item()
 
     # Reverse label map for prediction
@@ -49,8 +50,8 @@ def detection(model, reverse_label_map):
                         frame,
                         lm,
                         mp_hands.HAND_CONNECTIONS,
-                        mp.solutions.drawing_styles.get_default_hand_landmarks_style(),
-                        mp.solutions.drawing_styles.get_default_hand_connections_style(),
+                        custom_landmark_style,
+                        custom_connection_style,
                     )
 
                 for hand_landmarks in results.multi_hand_landmarks:
@@ -86,7 +87,7 @@ def detection(model, reverse_label_map):
                 cv2.putText(
                     frame,
                     predicted_class,
-                    (x1, y1),
+                    (x1, y1 - 20),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     2,
                     (0, 140, 239),
@@ -108,7 +109,6 @@ def detection(model, reverse_label_map):
 
 
 if __name__ == "__main__":
-    pass
     # Initialize Mediapipe Hands
     mp_hands = mp.solutions.hands
     hands = mp_hands.Hands(
@@ -117,6 +117,14 @@ if __name__ == "__main__":
         min_tracking_confidence=0.7,
     )
 
+    # Drawing utilities.
+    mp_drawing = mp.solutions.drawing_utils
+
+    # Custom styles for landmarks and connections.
+    custom_landmark_style = mp_drawing.DrawingSpec(color=(244, 250, 197), thickness=4)
+    custom_connection_style = mp_drawing.DrawingSpec(color=(250, 207, 97), thickness=2)
+
+    time.sleep(2)
     choose_model = input(
         """
                          Choose one of the following model(1/2):
