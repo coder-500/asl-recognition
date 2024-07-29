@@ -11,47 +11,47 @@ from tensorflow.keras.models import load_model
 import threading
 
 
-# @st.cache_resource(show_spinner=False)
-def text_detection_model_load():
-    # Load the model and label map
-    model = load_model("models/fine_tuned_alpha.keras")
-    label_map = np.load("label_map/alphabet_label_map.npy", allow_pickle=True).item()
-
-    # Reverse label map for prediction
-    reverse_label_map = {v: k for k, v in label_map.items()}
-
-    return model, reverse_label_map
-
-
-# @st.cache_resource(show_spinner=False)
-def num_detection_model_load():
-    # Load the model and label map
-    model = load_model("models/asl_number_model_2.keras")
-    label_map = np.load("label_map/num_label_map.npy", allow_pickle=True).item()
-
-    # Reverse label map for prediction
-    reverse_label_map = {v: k for k, v in label_map.items()}
-
-    return model, reverse_label_map
-
-
-# 061624
 # @st.cache_resource(max_entries=1000, show_spinner=False)
 # def text_detection_model_load():
-#     interpreter = tf.lite.Interpreter(model_path="models/asl_alphabet_model.tflite")
-#     interpreter.allocate_tensors()
+#     # Load the model and label map
+#     model = load_model("models/asl_alphabet_model.h5")
 #     label_map = np.load("label_map/alphabet_label_map.npy", allow_pickle=True).item()
+
+#     # Reverse label map for prediction
 #     reverse_label_map = {v: k for k, v in label_map.items()}
-#     return interpreter, reverse_label_map
+
+#     return model, reverse_label_map
 
 
 # @st.cache_resource(max_entries=1000, show_spinner=False)
 # def num_detection_model_load():
-#     interpreter = tf.lite.Interpreter(model_path="models/asl_number_model.tflite")
-#     interpreter.allocate_tensors()
+#     # Load the model and label map
+#     model = load_model("models/asl_number_model.h5")
 #     label_map = np.load("label_map/num_label_map.npy", allow_pickle=True).item()
+
+#     # Reverse label map for prediction
 #     reverse_label_map = {v: k for k, v in label_map.items()}
-#     return interpreter, reverse_label_map
+
+#     return model, reverse_label_map
+
+
+# 061624
+@st.cache_resource(max_entries=1000, show_spinner=False)
+def text_detection_model_load():
+    interpreter = tf.lite.Interpreter(model_path="models/asl_alphabet_model.tflite")
+    interpreter.allocate_tensors()
+    label_map = np.load("label_map/alphabet_label_map.npy", allow_pickle=True).item()
+    reverse_label_map = {v: k for k, v in label_map.items()}
+    return interpreter, reverse_label_map
+
+
+@st.cache_resource(max_entries=1000, show_spinner=False)
+def num_detection_model_load():
+    interpreter = tf.lite.Interpreter(model_path="models/asl_number_model.tflite")
+    interpreter.allocate_tensors()
+    label_map = np.load("label_map/num_label_map.npy", allow_pickle=True).item()
+    reverse_label_map = {v: k for k, v in label_map.items()}
+    return interpreter, reverse_label_map
 
 
 def video_frame_callback(frame):
