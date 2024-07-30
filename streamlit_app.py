@@ -11,10 +11,10 @@ from tensorflow.keras.models import load_model
 import threading
 
 
-# @st.cache_resource(show_spinner=False)
+@st.cache_resource(max_entries=1000, show_spinner=False)
 def text_detection_model_load():
     # Load the model and label map
-    model = load_model("models/fine_tuned_alpha.keras")
+    model = load_model("models/fine_tuned_alpha.h5")
     label_map = np.load("label_map/alphabet_label_map.npy", allow_pickle=True).item()
 
     # Reverse label map for prediction
@@ -23,10 +23,10 @@ def text_detection_model_load():
     return model, reverse_label_map
 
 
-# @st.cache_resource(show_spinner=False)
+@st.cache_resource(max_entries=1000, show_spinner=False)
 def num_detection_model_load():
     # Load the model and label map
-    model = load_model("models/asl_number_model_2.keras")
+    model = load_model("models/asl_number_model_2.h5")
     label_map = np.load("label_map/num_label_map.npy", allow_pickle=True).item()
 
     # Reverse label map for prediction
@@ -138,8 +138,8 @@ def detection():
                 prev_pred = predicted_class
 
                 data_aux = np.array(data_aux).reshape(1, 21, 3, 1)
-                # prediction = model.predict(data_aux)
-                prediction = detect_with_tflite(model, data_aux)  # 061624
+                prediction = model.predict(data_aux)
+                # prediction = detect_with_tflite(model, data_aux)  # 061624
                 predicted_class = reverse_label_map[np.argmax(prediction)]
 
                 if prev_pred == predicted_class:
@@ -151,13 +151,13 @@ def detection():
                 if count_same_frame > 10:  # 061724
                     word += predicted_class
                     word_placeholder.markdown(
-                        f"<p>Output: <span class='out'>{word}</span></p>",
+                        f"<p class='prediction_out'>Output: <span class='out'>{word}</span></p>",
                         unsafe_allow_html=True,
                     )
                     count_same_frame = 0
 
                 placeholder.markdown(
-                    f"<p>Prediction: <span class='out'>{predicted_class}</span></p>",
+                    f"<p class='prediction_out'>Prediction: <span class='out'>{predicted_class}</span></p>",
                     unsafe_allow_html=True,
                 )
                 start = time.time()
@@ -165,14 +165,14 @@ def detection():
                 flag = False
                 end = time.time() - start
                 placeholder.markdown(
-                    f"<p>Prediction: </p>",
+                    f"<p class='prediction_out'>Prediction: </p>",
                     unsafe_allow_html=True,
                 )
                 word += " "
                 if end > 15:
                     word = " "
                 word_placeholder.markdown(
-                    f"<p>Output: <span class='out'>{word}</span></p>",
+                    f"<p class='prediction_out'>Output: <span class='out'>{word}</span></p>",
                     unsafe_allow_html=True,
                 )
 
@@ -181,11 +181,11 @@ def detection():
             print(f"An Error occurred: {e}")
     else:
         placeholder.markdown(
-            f"<p>Prediction: </p>",
+            f"<p class='prediction_out'>Prediction: </p>",
             unsafe_allow_html=True,
         )
         word_placeholder.markdown(
-            f"<p>Output: </p>",
+            f"<p class='prediction_out'>Output: </p>",
             unsafe_allow_html=True,
         )
 
@@ -252,10 +252,10 @@ if __name__ == "__main__":
 
     detection()
 
-    with st.expander("How to use"):
-        st.write(
-            """
-            Direction of use...
-        """
-        )
-        st.image("https://static.streamlit.io/examples/dice.jpg")
+    # with st.expander("How to use"):
+    #     st.write(
+    #         """
+    #         Direction of use...
+    #     """
+    #     )
+    #     st.image("https://static.streamlit.io/examples/dice.jpg")
